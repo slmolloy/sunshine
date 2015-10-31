@@ -1,9 +1,13 @@
 package com.example.android.sunshine.app;
 
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +40,39 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
+        switch(id) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.action_view_location:
+                openPreferredLocationMap();
+                return true;
+            default:
+                break;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openPreferredLocationMap() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String zip = sharedPref.getString(
+                getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+
+        Uri location = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q", zip)
+                .build();
+
+        Intent map = new Intent(Intent.ACTION_VIEW);
+        map.setData(location);
+
+        if (map.resolveActivity(getPackageManager()) != null) {
+            startActivity(map);
+        } else {
+            Log.d(LOG_TAG, "Couldn't call " + zip + ", no receiving apps installed!");
+        }
     }
 
     /**
