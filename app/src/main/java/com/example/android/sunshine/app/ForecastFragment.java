@@ -1,8 +1,11 @@
 package com.example.android.sunshine.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -51,6 +54,12 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
     }
@@ -59,8 +68,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            FetchWeatherTask task = new FetchWeatherTask();
-            task.execute("94043", "7");
+            updateWeather();
             return true;
         }
 
@@ -75,20 +83,7 @@ public class ForecastFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        String[] weekForecast = {
-            "Today -- Sunny -- 88/63",
-            "Tomorrow -- Rainy -- 23/12",
-            "Wednesday -- Sunny -- 88/12",
-            "Thursday -- Snowing -- 23/2",
-            "Friday -- Sunny -- 98/88",
-            "Saturday -- Cloudy -- 65/54",
-            "Sunday -- Rainy -- 54/48",
-            "Monday -- Snowing -- 23/9",
-            "Tuesday -- Sunny -- 103/98",
-            "Wednesday -- Sunny -- 78/76"
-        };
-
-        List<String> weekForecastList = new ArrayList<>(Arrays.asList(weekForecast));
+        List<String> weekForecastList = new ArrayList<>();
 
         mForecastAdapter = new ArrayAdapter<>(
                 getActivity(),
@@ -114,6 +109,15 @@ public class ForecastFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void updateWeather() {
+        FetchWeatherTask task = new FetchWeatherTask();
+        SharedPreferences locationPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String zip = locationPref.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+
+        task.execute(zip, "7");
     }
 
     /**
