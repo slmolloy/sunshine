@@ -1,0 +1,9 @@
+language: android
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-23.0.1
+    - android-23
+    - sys-img-x86-android-23
+
