@@ -1,3 +1,6 @@
+#sunshine
+[![Build Status](https://travis-ci.org/slmolloy/sunshine.svg?branch=master)](https://travis-ci.org/slmolloy/sunshine)
+
 Sunshine app created from Udacity Developing Android Apps course.
 
 #Install
