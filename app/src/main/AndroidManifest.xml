@@ -35,6 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.sunshine.app.MainActivity" />
         </activity>
+
+        <meta-data
+            android:name="api_key_open_weather_map"
+            android:value="@string/api_key_open_weather_map" />
     </application>
 
 </manifest>

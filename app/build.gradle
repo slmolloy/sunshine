@@ -10,6 +10,8 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        resValue "string", "api_key_open_weather_map", "$System.env.OPEN_WEATHER_MAP_API_KEY"
     }
     buildTypes {
         release {

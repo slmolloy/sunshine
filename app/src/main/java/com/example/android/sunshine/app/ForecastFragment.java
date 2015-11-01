@@ -2,6 +2,8 @@ package com.example.android.sunshine.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -254,19 +256,22 @@ public class ForecastFragment extends Fragment {
             final String UNITS_PARAM = "units";
             final String DAYS_PARAM = "cnt";
             final String APPID_PARAM = "appid";
-            final String WEATHER_APPID = "a95ec551147dd1e94a3e0c349d6aed3e";
 
             try {
+                ApplicationInfo ai = getActivity().getPackageManager().getApplicationInfo(getActivity().getPackageName(), PackageManager.GET_META_DATA);
+                Bundle bundle = ai.metaData;
+                String weatherAppId = bundle.getString("api_key_open_weather_map");
+
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                // "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043,USA&mode=json&units=metric&cnt=7&appid=a95ec551147dd1e94a3e0c349d6aed3e"
+                // "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043,USA&mode=json&units=metric&cnt=7&appid=<your api key>"
                 Uri.Builder builder = Uri.parse(FORECAST_URL_BASE).buildUpon()
                         .appendQueryParameter(QUERY_PARAM, params[0] + ",USA")
                         .appendQueryParameter(FORMAT_PARAM, "json")
                         .appendQueryParameter(UNITS_PARAM, "metric")
                         .appendQueryParameter(DAYS_PARAM, params[1])
-                        .appendQueryParameter(APPID_PARAM, WEATHER_APPID);
+                        .appendQueryParameter(APPID_PARAM, weatherAppId);
 
                 URL url = new URL(builder.build().toString());
 
@@ -305,6 +310,8 @@ public class ForecastFragment extends Fragment {
                 return null;
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Error ", e);
+            } catch(PackageManager.NameNotFoundException e) {
+                Log.e(LOG_TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage());
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
