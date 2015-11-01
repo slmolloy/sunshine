@@ -11,4 +11,4 @@ android:
   licenses:
     - android-sdk-license-.+
 
-script: "gradle build connectedCheck"
+script: "gradle build assembleDebug"
