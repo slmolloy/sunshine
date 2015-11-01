@@ -6,10 +6,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
+
         return true;
     }
 
@@ -79,8 +83,15 @@ public class DetailActivity extends AppCompatActivity {
      * Detail fragment containing simple view.
      */
     public static class DetailFragment extends Fragment {
-        public DetailFragment() {
 
+        private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+
+        private ShareActionProvider mShareActionProvider;
+        private static final String FORECAST_SHARE_HASHTAG = "#SunshinApp";
+        private String mWeatherMessage;
+
+        public DetailFragment() {
+            setHasOptionsMenu(true);
         }
 
         @Override
@@ -91,12 +102,37 @@ public class DetailActivity extends AppCompatActivity {
 
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                String weatherMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
+                mWeatherMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
                 ((TextView) rootView.findViewById(R.id.detail_text))
-                        .setText(weatherMessage);
+                        .setText(mWeatherMessage);
             }
 
             return rootView;
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            inflater.inflate(R.menu.detailfragment, menu);
+
+            MenuItem menuItem = menu.findItem(R.id.action_share);
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+            setShareIntent(createShareIntent());
+        }
+
+        private void setShareIntent(Intent shareIntent) {
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(shareIntent);
+            } else {
+                Log.d(LOG_TAG, "Share Action Provider is null?");
+            }
+        }
+
+        private Intent createShareIntent() {
+            return new Intent(Intent.ACTION_SEND)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_TEXT, mWeatherMessage + " " + FORECAST_SHARE_HASHTAG);
         }
     }
 }
