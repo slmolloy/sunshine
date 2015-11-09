@@ -7,14 +7,19 @@ android:
     - android-23
     - extra-android-support
     - extra-android-m2repository
-    - sys-img-x86-android-23
+      # Emulator not working yet, don't need system image.
+      # - sys-img-x86-android-23
   licenses:
     - android-sdk-license-.+
 
-script: "gradle build connectedAndroidTest"
+script: "gradle build assembleDebug"
 
-before_script:
-  - echo no | android create avd --force -n test -t android-23
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &"
+# Connected android test and before_script to statup emulator are currently not
+# working. Eventually bring this back in.
+#script: "gradle build connectedAndroidTest"
+
+#before_script:
+#  - echo no | android create avd --force -n test -t android-23
+#  - emulator -avd test -no-skin -no-audio -no-window &
+#  - android-wait-for-emulator
+#  - adb shell input keyevent 82 &"
