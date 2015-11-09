@@ -71,16 +71,14 @@ public class TestUtilities extends AndroidTestCase {
 
     static long insertNorthPoleLocationValues(Context context) {
         // insert our test records into the database
-        WeatherDbHelper dbHelper = new WeatherDbHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
+        SQLiteDatabase db = new WeatherDbHelper(context).getWritableDatabase();
+        return insertNorthPoleLocationValues(db);
+    }
 
-        long locationRowId;
-        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
-
-        // Verify we got a row back.
-        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
-
+    static long insertNorthPoleLocationValues(SQLiteDatabase db) {
+        ContentValues values = createNorthPoleLocationValues();
+        long locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
+        assertTrue("Error: failed to insert North Pole Location Values", locationRowId != -1);
         return locationRowId;
     }
 
