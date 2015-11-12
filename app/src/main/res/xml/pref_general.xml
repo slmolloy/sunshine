@@ -8,6 +8,13 @@
         android:inputType="text"
         android:singleLine="true" />
 
+    <EditTextPreference
+        android:title="@string/pref_days_label"
+        android:key="@string/pref_days_key"
+        android:defaultValue="@string/pref_days_default"
+        android:inputType="text"
+        android:singleLine="true" />
+
     <ListPreference
         android:title="@string/pref_units_label"
         android:key="@string/pref_units_key"

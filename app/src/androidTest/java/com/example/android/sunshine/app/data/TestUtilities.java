@@ -70,7 +70,7 @@ public class TestUtilities {
     }
 
     static long insertNorthPoleLocationValues(SQLiteDatabase db) {
-        ContentValues values = createNorthPoleLocationValues();
+                ContentValues values = createNorthPoleLocationValues();
         long locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
         AndroidTestCase.assertTrue("Error: failed to insert North Pole Location Values", locationRowId != -1);
         return locationRowId;
