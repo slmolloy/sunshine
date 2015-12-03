@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0px" y="0px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
+    <ellipse id="elipse" transform="matrix(0.7811 -0.6244 0.6244 0.7811 -9.7897 21.5039)"
+        fill="#317DC1" cx="25.8" cy="24.7" rx="25" ry="15.4" />
+    <text transform="matrix(1.0578 0 0 1 12.0132 37.3828)" fill="#FFFFFF"
+        font-family="Helvetica-Bold" font-size="36">C</text>
+</svg>

@@ -1,6 +1,9 @@
 package com.example.android.sunshine.app;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,8 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.text.Html;
+import android.text.Html.ImageGetter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -86,12 +94,20 @@ public class DetailActivity extends AppCompatActivity {
 
         private static final String LOG_TAG = DetailFragment.class.getSimpleName();
 
+        private Context mContext = null;
+
         private ShareActionProvider mShareActionProvider;
         private static final String FORECAST_SHARE_HASHTAG = "#SunshinApp";
         private String mWeatherMessage;
 
         public DetailFragment() {
             setHasOptionsMenu(true);
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            mContext = context;
         }
 
         @Override
@@ -107,7 +123,50 @@ public class DetailActivity extends AppCompatActivity {
                         .setText(mWeatherMessage);
             }
 
+            String html = "<p>A long time ago in a <img src=\"android.svg\">ool <b>galaxy</b> far far away lived a young jedi. The story shall will always <img>ontinue on no matter what happens. After all there are a total of 9 movies to be made.</p>";
+
+            TextView tv1 = (TextView) rootView.findViewById(R.id.image_demo_text1);
+            int lineHeight = tv1.getLineHeight();
+            tv1.setText(Html.fromHtml(html, new HtmlImageHelper(lineHeight, lineHeight), null));
+
+            TextView tv2 = (TextView) rootView.findViewById(R.id.image_demo_text2);
+            lineHeight = tv2.getLineHeight();
+            tv2.setText(Html.fromHtml(html, new HtmlImageHelper(lineHeight, lineHeight), null));
+
+            TextView tv3 = (TextView) rootView.findViewById(R.id.image_demo_text3);
+            lineHeight = tv3.getLineHeight();
+            tv3.setText(Html.fromHtml(html, new HtmlImageHelper(lineHeight, lineHeight), null));
+
             return rootView;
+        }
+
+        public Drawable getSvgImageFromResource(Context context, String source, int width, int height) {
+            Drawable result = null;
+            try {
+                SVG svg = SVG.getFromResource(context.getResources(), R.raw.ccd);
+                svg.setDocumentWidth(width);
+                svg.setDocumentHeight(height);
+                result = new PictureDrawable(svg.renderToPicture());
+                result.setBounds(0, 0, result.getIntrinsicWidth(), result.getIntrinsicHeight());
+            } catch (SVGParseException e) {
+                Log.e(LOG_TAG, "Error loading [" + source + "] with exception: " + e.toString());
+            }
+            return result;
+        }
+
+        public class HtmlImageHelper implements ImageGetter {
+            private int width = -1;
+            private int height = -1;
+
+            public HtmlImageHelper(int width, int height) {
+                if (width > 0) { this.width = width; }
+                if (height > 0) { this.height = height; }
+            }
+
+            @Override
+            public Drawable getDrawable(String source) {
+                return getSvgImageFromResource(mContext, source, width, height);
+            }
         }
 
         @Override
