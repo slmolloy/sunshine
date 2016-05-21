@@ -12,7 +12,7 @@ android:
   licenses:
     - android-sdk-license-.+
 
-script: "gradle build assembleDebug"
+script: "./gradlew build assembleDebug"
 
 # Connected android test and before_script to statup emulator are currently not
 # working. Eventually bring this back in.
