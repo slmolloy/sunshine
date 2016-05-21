@@ -1,7 +1,9 @@
 package com.example.android.sunshine.app;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -128,11 +130,19 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
+        @SuppressLint("InlinedApi")
         private Intent createShareIntent() {
-            return new Intent(Intent.ACTION_SEND)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-                .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, mWeatherMessage + " " + FORECAST_SHARE_HASHTAG);
+            Intent intent = new Intent(Intent.ACTION_SEND)
+                    .setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT, mWeatherMessage + " " + FORECAST_SHARE_HASHTAG);
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            } else {
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            }
+
+            return intent;
         }
     }
 }
