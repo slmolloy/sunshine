@@ -1,4 +1,5 @@
 language: android
+jdk: oraclejdk7
 android:
   components:
     - platform-tools
@@ -7,19 +8,27 @@ android:
     - android-23
     - extra-android-support
     - extra-android-m2repository
-      # Emulator not working yet, don't need system image.
-      # - sys-img-x86-android-23
+    - extra-google-m2repository
+    - sys-img-x86-android-23
   licenses:
     - android-sdk-license-.+
 
-script: "./gradlew build assembleDebug"
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=8
+    - MALLOC_ARENA_MAX=2
 
-# Connected android test and before_script to statup emulator are currently not
-# working. Eventually bring this back in.
-#script: "gradle build connectedAndroidTest"
+before_install:
+  - export ANDROID_HOME=/usr/local/android-sdk
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
-#before_script:
-#  - echo no | android create avd --force -n test -t android-23
-#  - emulator -avd test -no-skin -no-audio -no-window &
-#  - android-wait-for-emulator
-#  - adb shell input keyevent 82 &"
+install:
+  - TERM=dumb ./gradlew assembleDebug
+
+before_script:
+  - echo no | android create avd --force -n test -t android-23 --abi default/x86
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - adb wait-for-local-device
+  - adb shell input keyevent 82 &
+
+script: ./gradlew connectedAndroidTest -PdisablePreDex --stacktrace
