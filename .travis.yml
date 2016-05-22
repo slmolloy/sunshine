@@ -37,3 +37,6 @@ addons:
     paths:
       - ./app/build/outputs/apk/app-debug.apk
       - ./app/build/reports/androidTests/connected
+      - ./app/build/outputs/lint-results-debug_files
+      - ./app/build/outputs/lint-results-debug.html
+      - ./app/build/outputs/androidTest-results
