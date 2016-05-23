@@ -19,7 +19,6 @@ env:
   - ARTIFACTS_SECRET=r/Ly+KNFfhoJ/ueLkH26VcIqeqzF6lIANYc57+B1
 install:
 - ./gradlew lintDebug
-- ./gradlew assembleDebug
 - ./gradlew testDebug
 before_script:
 - export ANDROID_HOME=/usr/local/android-sdk
