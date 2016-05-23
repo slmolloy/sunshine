@@ -15,8 +15,8 @@ env:
   global:
   - ADB_INSTALL_TIMEOUT=8
   - ARTIFACTS_BUCKET=sunshineartifacts
-  - ARTIFACTS_KEY=AKIAI4U2ZHOS2J33NWCQ
-  - ARTIFACTS_SECRET=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
+  - secure: fuwAL+0mcGCmsGOI/yFBtOTUjwx4+P/lbqY/OGY0JaKCxFooWdIvDbqi2K3tzS3QCYOTNWmN4pUz+PZ7+FlN2A6vSkqWKEp5YHIFpSwxaQshn9cA7HkGL4ptE3ppvYANqSgfsGHgslyVvLWXgbkouMnI66SHv+CP9bZd0oyhAdTn4xJr8d/S9DYqPEXszC6VxFW8LIXWc2VsHAYdrd+F7SbAMN0XBluTs5dLTcACE6WWYdUzKu1WujP0yySuNGxQjGNsqqwqqmMoY6fRoCKhshJB0nMAGLzoVE0fy+qdeCVfJbF361Yg/OkEEAmy+bdREU0/uHTOBL+sM3FL7HLOLoX/m+rA7pVu6U+XG2FgfHOW9eLjjHnipoSOVxuNMB7mRJjMo9U3dJVxDM0b9VuYKItrJdd8taeKro87s/gfGP1YWbn6XVX78v5S2Q/LlOOaJs3QrdgAxphoQsiOWQF/kUCN4Uu8KPYWUmGenI3NivhfvWpmSxHoK2ifKA28ZmnEV6HH9/cCop8BvhYD9lPyGGFzdwAqm9jagXgdQXtSsQyM//7o+gpiF61BgmXb0BX+Dj8yRen2qa3KTgZ6Dq5ib7Zd3Wzf06ekYQ7yyvxI4jO8kOP9vP8S4/wE2UrVgwPLROgBY9GmGcnbsF8xudejXtni//nUtuSvA5B6RM9eDIo=
+  - secure: ZU7DQdn7iJTHbO7XpjwaMEDOXkIzNceTcx+ARJ3MJWjKz6JRLICt4u42tewg9Gfx8PLu9W+wtVnhbYpVoImjT6LxY+YQXtw1bXzKtqI+TIlTifOpFmEufDrgyI4J9Ls9PgfDSoxn7pQJk9ev10rC/D29/Dowy/PvL7vks/wcfm1JrsOMk2bWJg4b5679rWPxmhhFOCI5JHmgBq4PuDEQE/EvB7KSrTFnL31AEUz73g3QLnac+LH91BzC0JyM1YijfWkgUrT6grFY58rmi/wHslIAII9BeepVK/yUAIlltPJPWi1e67d7fxsGvXKSCDxitz4bnKXcs9X94ljk/y2o9L6Xgwa+vLtMVbuLWq4oJAMwSUpfVQUfO/fDjAON8DT1ZYtImZQRwdHkf2ppLI+2RWYHMLipzlpoFkJvYtVUQmYnkyAGtR2dkQLAvyyNyF6G/O5Zn0A0ahaPH6+gs3zzel1k1WjQUcy3PULNkREg4xtgrzzDW9jCpC8e8nA3v/AG1i3iDiMZNUfgrMpeMvvipLFJZScB7YvgrM3YAPLIOLivMm6dW3mCG6jsgoCJoUeMUs4+AjxEUi1dLK0T9P96QvIcjJzMtXNe+wUIl7CEXsLOzEbd+EwOFFZFsn2jZOe07YeM+Ki+saZ6Sc5ochPLkmsbSaXsCBzdU/n8EvBbVCU=
 install:
 - ./gradlew lintDebug
 - ./gradlew testDebug
@@ -38,11 +38,11 @@ after_script:
 addons:
   artifacts:
     debug: true
-    s3_region: "us-west-2"
+    s3_region: us-west-2
     paths:
-      - ./app/build/outputs/apk/app-debug.apk
-      - ./app/build/reports/androidTests/connected
-      - ./app/build/outputs/lint-results-debug_files
-      - ./app/build/outputs/lint-results-debug.html
-      - ./app/build/outputs/androidTest-results
-      - ./app/build/test-results/debug
+    - ./app/build/outputs/apk/app-debug.apk
+    - ./app/build/reports/androidTests/connected
+    - ./app/build/outputs/lint-results-debug_files
+    - ./app/build/outputs/lint-results-debug.html
+    - ./app/build/outputs/androidTest-results
+    - ./app/build/test-results/debug
