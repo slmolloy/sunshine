@@ -29,16 +29,12 @@ before_script:
 script:
 - ./gradlew installDebugAndroidTest
 - adb shell input keyevent 82 &
-- ./gradlew connectedCheck
+- ./gradlew connectedDebugAndroidTest
 after_script:
 - /usr/bin/env
-- echo 'TRAVIS_BUILD_ID' $TRAVIS_BUILD_ID
-- echo 'TRAVIS_JOB_ID' $TRAVIS_JOB_ID
-- echo 'TRAVIS_PULL_REQUEST' $TRAVIS_PULL_REQUEST
-- echo 'TRAVIS_REPO_SLUG' $TRAVIS_REPO_SLUG
 addons:
   artifacts:
-    debug: true
+    debug: false
     s3_region: us-west-2
     paths:
     - ./app/build/outputs/apk/app-debug.apk
